@@ -1,4 +1,5 @@
 mod regex;
+mod enfa;
 
 fn main() {
 	let input = match std::env::args().nth(1) {
@@ -9,5 +10,6 @@ fn main() {
 		Some(str) => str
 	};
 	let regex = regex::parse(&input);
-	println!("{}", regex);
+	let nfae = enfa::regex_to_nfae(&regex);
+	println!("{}", nfae.increment);
 }
