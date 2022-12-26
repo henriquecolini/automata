@@ -19,9 +19,16 @@ impl Copy for Symbol {}
 
 impl Display for Symbol {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Symbol::Epsilon => write!(f, "ε"),
-            Symbol::Symbol(c) => write!(f, "{}", c),
+        let c: char = char::from(*self);
+        write!(f, "{}", c)
+    }
+}
+
+impl From<Symbol> for char {
+    fn from(value: Symbol) -> Self {
+        match value {
+            Symbol::Epsilon => 'ε',
+            Symbol::Symbol(c) => c,
         }
     }
 }

@@ -3,12 +3,14 @@ use std::io::Write;
 use std::process::Command;
 use std::time::Instant;
 
-use crate::enfa::nfae_to_dfae;
+use crate::export::nfae_dot;
+use crate::nfae::nfae_to_dfae;
 
+mod export;
 mod transition;
 mod symbol;
 mod state;
-mod enfa;
+mod nfae;
 mod regex;
 
 fn main() {
@@ -22,16 +24,16 @@ fn main() {
     println!("Parsing duration: {:?}", duration);
 
     let start = Instant::now();
-    let nfae = enfa::regex_to_nfae(&regex);
+    let nfae = nfae::regex_to_nfae(&regex);
     let duration = start.elapsed();
-    println!("RegEx to eNFA duration: {:?}", duration);
+    println!("RegEx to nfae duration: {:?}", duration);
 
     let nfae = nfae_to_dfae(&nfae);
 
     if let Some(dot_path) = std::env::args().nth(2) {
         let start = Instant::now();
         let mut dot_file = File::create(&dot_path).unwrap();
-        dot::render(&nfae, &mut dot_file).unwrap();
+        nfae_dot(&mut dot_file, &nfae, false).unwrap();
         let duration = start.elapsed();
         println!("Rendering duration: {:?}", duration);
 

@@ -5,7 +5,6 @@ use crate::{
     transition::Transition,
 };
 use std::{
-    borrow::Cow,
     collections::{BTreeSet, HashMap, HashSet},
     fmt::Display,
 };
@@ -82,6 +81,26 @@ impl NFAe {
         }
         alphabet
     }
+
+    pub fn get_states(&self) -> StateSet {
+        self.states.to_owned()
+    }
+
+    pub fn get_transitions(&self) -> HashSet<Transition> {
+        self.transitions.to_owned()
+    }
+
+    pub fn is_initial(&self, x: &State) -> bool {
+        match &self.initial {
+            Some(st) => x.0 == st.0,
+            None => false,
+        }
+    }
+
+    pub fn is_final(&self, x: &State) -> bool {
+        self.finals.contains(x)
+    }
+
 }
 
 impl Display for NFAe {
@@ -115,80 +134,6 @@ impl Display for NFAe {
             write!(f, "\nd({:?}, {}) = {:?}", t.from, t.when, t.to)?;
         }
         write!(f, "")
-    }
-}
-
-type Nd<'a> = &'a String;
-type Ed<'a> = (Nd<'a>, Nd<'a>, Symbol);
-
-impl<'a> dot::GraphWalk<'a, Nd<'a>, Ed<'a>> for NFAe {
-    fn nodes(&'a self) -> dot::Nodes<'a, Nd<'a>> {
-        let mut nodes = Vec::with_capacity(self.states.len());
-        for a in &self.states {
-            nodes.push(&a.0);
-        }
-        nodes.sort();
-        Cow::Owned(nodes)
-    }
-
-    fn edges(&'a self) -> dot::Edges<'a, Ed<'a>> {
-        let mut edges = Vec::with_capacity(self.transitions.len());
-        for trans in &self.transitions {
-            edges.push((&trans.from.0, &trans.to.0, trans.when));
-        }
-        Cow::Owned(edges)
-    }
-
-    fn source(&'a self, edge: &Ed<'a>) -> Nd<'a> {
-        edge.0
-    }
-
-    fn target(&'a self, edge: &Ed<'a>) -> Nd<'a> {
-        edge.1
-    }
-}
-
-impl<'a> dot::Labeller<'a, Nd<'a>, Ed<'a>> for NFAe {
-    fn graph_id(&'a self) -> dot::Id<'a> {
-        dot::Id::new("enfa").unwrap()
-    }
-
-    fn node_id(&'a self, n: &Nd<'a>) -> dot::Id<'a> {
-        let id = n
-            .replace("{}", "empty")
-            .replace("{", "")
-            .replace("}", "")
-            .replace(" ", "")
-            .replace(",", "_");
-        dot::Id::new(id.to_owned()).expect(&id)
-    }
-
-    fn node_label(&'a self, n: &Nd<'a>) -> dot::LabelText<'a> {
-        let is_final = self.finals.contains(&State(n.to_string()));
-        let is_initial = if let Some(s) = &self.initial {
-            s.0 == n.to_string()
-        } else {
-            false
-        };
-        dot::LabelText::LabelStr(
-            match (is_initial, is_final) {
-                (true, true) => format!(">>({})", n),
-                (true, false) => format!(">>{}", n),
-                (false, true) => format!("({})", n),
-                (false, false) => format!("{}", n),
-            }
-            .into(),
-        )
-    }
-
-    fn edge_label<'b>(&'b self, e: &Ed) -> dot::LabelText<'b> {
-        dot::LabelText::LabelStr(
-            match e.2 {
-                Symbol::Epsilon => "eps".into(),
-                Symbol::Symbol(c) => format!("{}", c),
-            }
-            .into(),
-        )
     }
 }
 
