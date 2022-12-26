@@ -61,3 +61,7 @@ pub fn nfae_dot<T: Write>(w: &mut T, nfae: &NFAe, hide_labels: bool) -> Result<(
     }
     writeln!(w, "}}")
 }
+
+pub fn nfae_table<T: Write>(_w: &mut T, _nfae: &NFAe) -> Result<(), std::io::Error> {
+    Ok(())
+}
