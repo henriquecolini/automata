@@ -19,25 +19,35 @@ mod transition;
 #[command(version = "0.1")]
 #[command(about = "Parses Formal Regular Expressions and outputs graphs.", long_about = None)]
 struct Args {
+    /// Formal Regular Expression to be parsed
     expression: String,
     #[arg(short, long, action = clap::ArgAction::SetTrue)]
+    /// Whether or not convert NFA-e to DFA
     dfa: bool,
     #[command(subcommand)]
+    /// Export settings
     export: Option<ExportSettings>,
 }
 
 #[derive(Subcommand)]
 enum ExportSettings {
+    /// Export a DOT file for Graphviz
     DOT {
         #[arg(short, long, action = clap::ArgAction::SetTrue)]
+        /// No state labels (best with DFAs)
         no_labels: bool,
+        /// Output path
         output: String,
     },
+    /// Export an SVG file (requires Graphviz)
     SVG {
         #[arg(short, long, action = clap::ArgAction::SetTrue)]
+        /// No state labels (best with DFAs)
         no_labels: bool,
+        /// Output path
         output: String,
     },
+    /// Export a transition table
     Table {
         output: String,
     },
