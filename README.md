@@ -70,3 +70,15 @@ A DFA that accepts strings that begin and end with the same symbol, Σ = {a,b,c}
 `automata 'a+b+c+a(a+b+c)*a+b(a+b+c)*b+c(a+b+c)*c' -d svg -n example4.svg`
 
 ![Example 4](./img/example4.svg)
+
+## Building
+
+This project is to be built using cargo. Clone the project, run `cargo build` and you're good to go. For an optimized version, `cargo build --release` is available.
+
+[You must have Rust installed.](https://www.rust-lang.org/tools/install)
+
+## Reference
+
+SILVA, M.V.G. Autômatos, Computabilidade e Complexidade Computacional, 2017.
+
+HOPCROFT, J. E.; MOTWANI R.; ULLMAN, J. D. Introduction to Automata Theory, Languages, and Computation (2nd Edition), Addison Wesley, 2001.
