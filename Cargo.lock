@@ -7,6 +7,7 @@ name = "automata"
 version = "0.1.0"
 dependencies = [
  "dot",
+ "proceed",
 ]
 
 [[package]]
@@ -14,3 +15,9 @@ name = "dot"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a74b6c4d4a1cff5f454164363c16b72fa12463ca6b31f4b5f2035a65fa3d5906"
+
+[[package]]
+name = "proceed"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7a44d599a6cb184eb53aef9069de375d2af6b2c9c40723fdaa11d57d64604483"

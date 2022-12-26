@@ -3,7 +3,11 @@ use std::io::Write;
 use std::process::Command;
 use std::time::Instant;
 
-mod dfa;
+use crate::enfa::nfae_to_dfae;
+
+mod transition;
+mod symbol;
+mod state;
 mod enfa;
 mod regex;
 
@@ -21,6 +25,8 @@ fn main() {
     let nfae = enfa::regex_to_nfae(&regex);
     let duration = start.elapsed();
     println!("RegEx to eNFA duration: {:?}", duration);
+
+    let nfae = nfae_to_dfae(&nfae);
 
     if let Some(dot_path) = std::env::args().nth(2) {
         let start = Instant::now();
