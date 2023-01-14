@@ -32,6 +32,11 @@ Options:
   -V, --version  Print version information
 ```
 
+If you are building from source, you may run it from inside the root directory as
+```
+cargo run -- <arguments>
+```
+
 Exporting:
 
 ```
